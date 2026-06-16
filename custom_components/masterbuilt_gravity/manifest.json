@@ -1,6 +1,6 @@
 {
   "domain": "masterbuilt_gravity",
-  "name": "Masterbuilt Gravity",
+  "name": "Masterbuilt Gravity (Unofficial)",
   "codeowners": ["@hruskin"],
   "config_flow": true,
   "documentation": "https://github.com/hruskin/masterbuilt-gravity-ha",
