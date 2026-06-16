@@ -14,12 +14,14 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import MasterbuiltConfigEntry
+from .const import active_errors, target_reached
 from .entity import MasterbuiltEntity
 
 
 @dataclass(frozen=True, kw_only=True)
 class MbBinaryDescription(BinarySensorEntityDescription):
     value_fn: Callable[[dict[str, Any]], bool | None]
+    attrs_fn: Callable[[dict[str, Any]], dict[str, Any]] | None = None
 
 
 BINARY_SENSORS: tuple[MbBinaryDescription, ...] = (
@@ -46,6 +48,18 @@ BINARY_SENSORS: tuple[MbBinaryDescription, ...] = (
         translation_key="lid_open",
         device_class=BinarySensorDeviceClass.OPENING,
         value_fn=lambda r: r.get("lidOpn"),
+    ),
+    MbBinaryDescription(
+        key="problem",
+        translation_key="problem",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        value_fn=lambda r: bool(active_errors(r)),
+        attrs_fn=lambda r: {"codes": active_errors(r), "raw": r.get("errors")},
+    ),
+    MbBinaryDescription(
+        key="target_reached",
+        translation_key="target_reached",
+        value_fn=target_reached,
     ),
 )
 
@@ -74,3 +88,9 @@ class MasterbuiltBinarySensor(MasterbuiltEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool | None:
         return self.entity_description.value_fn(self.reported)
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        if self.entity_description.attrs_fn:
+            return self.entity_description.attrs_fn(self.reported)
+        return None

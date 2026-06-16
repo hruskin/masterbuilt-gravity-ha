@@ -31,13 +31,16 @@
       "probe3_temp": { "name": "Probe 3 temperature" },
       "probe3_target": { "name": "Probe 3 target" },
       "probe4_temp": { "name": "Probe 4 temperature" },
-      "probe4_target": { "name": "Probe 4 target" }
+      "probe4_target": { "name": "Probe 4 target" },
+      "error": { "name": "Error" }
     },
     "binary_sensor": {
       "power": { "name": "Power" },
       "cooking": { "name": "Cooking" },
       "door_open": { "name": "Hopper door" },
-      "lid_open": { "name": "Lid" }
+      "lid_open": { "name": "Lid" },
+      "problem": { "name": "Problem" },
+      "target_reached": { "name": "Target reached" }
     }
   }
 }

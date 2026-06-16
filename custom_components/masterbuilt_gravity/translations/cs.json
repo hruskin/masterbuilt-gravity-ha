@@ -31,13 +31,16 @@
       "probe3_temp": { "name": "Sonda 3 teplota" },
       "probe3_target": { "name": "Sonda 3 cíl" },
       "probe4_temp": { "name": "Sonda 4 teplota" },
-      "probe4_target": { "name": "Sonda 4 cíl" }
+      "probe4_target": { "name": "Sonda 4 cíl" },
+      "error": { "name": "Chyba" }
     },
     "binary_sensor": {
       "power": { "name": "Napájení" },
       "cooking": { "name": "Vaření" },
       "door_open": { "name": "Dvířka násypky" },
-      "lid_open": { "name": "Víko" }
+      "lid_open": { "name": "Víko" },
+      "problem": { "name": "Problém" },
+      "target_reached": { "name": "Cílová teplota dosažena" }
     }
   }
 }

@@ -20,7 +20,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import MasterbuiltConfigEntry
-from .const import TARGET_OFF
+from .const import TARGET_OFF, active_errors, error_text
 from .entity import MasterbuiltEntity
 
 
@@ -51,6 +51,7 @@ class MbSensorDescription(SensorEntityDescription):
     value_fn: Callable[[dict[str, Any]], Any]
     is_temperature: bool = False
     present_fn: Callable[[dict[str, Any]], bool] | None = None
+    attrs_fn: Callable[[dict[str, Any]], dict[str, Any]] | None = None
 
 
 SENSORS: tuple[MbSensorDescription, ...] = (
@@ -85,6 +86,13 @@ SENSORS: tuple[MbSensorDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         value_fn=lambda r: r.get("RSSI"),
+    ),
+    MbSensorDescription(
+        key="error",
+        translation_key="error",
+        icon="mdi:alert-circle",
+        value_fn=error_text,
+        attrs_fn=lambda r: {"codes": active_errors(r), "raw": r.get("errors")},
     ),
 )
 
@@ -149,6 +157,12 @@ class MasterbuiltSensor(MasterbuiltEntity, SensorEntity):
                 else UnitOfTemperature.CELSIUS
             )
         return self.entity_description.native_unit_of_measurement
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        if self.entity_description.attrs_fn:
+            return self.entity_description.attrs_fn(self.reported)
+        return None
 
     @property
     def available(self) -> bool:

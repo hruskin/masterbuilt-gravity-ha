@@ -25,3 +25,32 @@ DEFAULT_SCAN_INTERVAL = 30  # seconds
 
 CONF_EMAIL = "email"
 CONF_PASSWORD = "password"
+
+# Reported "errors" is a fixed-size list of error codes (0 == no error in that
+# slot). Known code -> human text. Some texts are server-defined; extend as we
+# observe more codes.
+KNOWN_ERRORS: dict[int, str] = {
+    4: "Charcoal failed to ignite",
+}
+
+
+def active_errors(reported: dict) -> list[int]:
+    """Return the list of non-zero error codes currently reported."""
+    return [c for c in (reported.get("errors") or []) if c]
+
+
+def error_text(reported: dict) -> str:
+    """Human-readable error summary, or 'OK' when no error is active."""
+    active = active_errors(reported)
+    if not active:
+        return "OK"
+    return ", ".join(KNOWN_ERRORS.get(c, f"Error {c}") for c in active)
+
+
+def target_reached(reported: dict) -> bool:
+    """True when the grill is engaged and has reached its (valid) target temp."""
+    trgt = (reported.get("heat") or {}).get("t2", {}).get("trgt")
+    main = reported.get("mainTemp")
+    if not reported.get("engaged") or main is None or trgt is None or trgt <= 0:
+        return False
+    return main >= trgt
