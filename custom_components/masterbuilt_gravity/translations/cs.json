@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Masterbuilt Gravity",
+        "description": "Přihlas se účtem z aplikace Masterbuilt.",
+        "data": {
+          "email": "E-mail",
+          "password": "Heslo"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Neplatný e-mail nebo heslo.",
+      "cannot_connect": "Nepodařilo se připojit ke cloudu Masterbuilt."
+    },
+    "abort": {
+      "already_configured": "Tento účet je už nastavený."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "grill_temp": { "name": "Teplota grilu" },
+      "target_temp": { "name": "Cílová teplota" },
+      "heat_intensity": { "name": "Intenzita ohřevu" },
+      "rssi": { "name": "Síla signálu" },
+      "probe1_temp": { "name": "Sonda 1 teplota" },
+      "probe1_target": { "name": "Sonda 1 cíl" },
+      "probe2_temp": { "name": "Sonda 2 teplota" },
+      "probe2_target": { "name": "Sonda 2 cíl" },
+      "probe3_temp": { "name": "Sonda 3 teplota" },
+      "probe3_target": { "name": "Sonda 3 cíl" },
+      "probe4_temp": { "name": "Sonda 4 teplota" },
+      "probe4_target": { "name": "Sonda 4 cíl" }
+    },
+    "binary_sensor": {
+      "power": { "name": "Napájení" },
+      "cooking": { "name": "Vaření" },
+      "door_open": { "name": "Dvířka násypky" },
+      "lid_open": { "name": "Víko" }
+    }
+  }
+}

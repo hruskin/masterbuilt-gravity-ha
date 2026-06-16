@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Masterbuilt Gravity",
+        "description": "Sign in with your Masterbuilt app account.",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid email or password.",
+      "cannot_connect": "Failed to connect to the Masterbuilt cloud."
+    },
+    "abort": {
+      "already_configured": "This account is already configured."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "grill_temp": { "name": "Grill temperature" },
+      "target_temp": { "name": "Target temperature" },
+      "heat_intensity": { "name": "Heat intensity" },
+      "rssi": { "name": "Signal strength" },
+      "probe1_temp": { "name": "Probe 1 temperature" },
+      "probe1_target": { "name": "Probe 1 target" },
+      "probe2_temp": { "name": "Probe 2 temperature" },
+      "probe2_target": { "name": "Probe 2 target" },
+      "probe3_temp": { "name": "Probe 3 temperature" },
+      "probe3_target": { "name": "Probe 3 target" },
+      "probe4_temp": { "name": "Probe 4 temperature" },
+      "probe4_target": { "name": "Probe 4 target" }
+    },
+    "binary_sensor": {
+      "power": { "name": "Power" },
+      "cooking": { "name": "Cooking" },
+      "door_open": { "name": "Hopper door" },
+      "lid_open": { "name": "Lid" }
+    }
+  }
+}
