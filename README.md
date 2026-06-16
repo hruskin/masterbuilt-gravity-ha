@@ -1,3 +1,5 @@
+<img src="icon.png" alt="icon" width="96" align="right">
+
 # Masterbuilt Gravity (Unofficial) – Home Assistant integration
 
 Unofficial Home Assistant integration for **Masterbuilt Gravity Series** charcoal
