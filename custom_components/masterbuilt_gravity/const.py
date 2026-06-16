@@ -48,9 +48,16 @@ def error_text(reported: dict) -> str:
 
 
 def target_reached(reported: dict) -> bool:
-    """True when the grill is engaged and has reached its (valid) target temp."""
+    """Approximate 'at temperature': powered, valid setpoint, temp within tolerance.
+
+    The reported shadow has no explicit "reached" flag and the grill fires its
+    push notification a couple of degrees below the setpoint, so a small
+    tolerance is applied. Note: ``engaged`` is NOT cooking – it is false once the
+    grill settles at temperature – so it must not gate this.
+    """
     trgt = (reported.get("heat") or {}).get("t2", {}).get("trgt")
     main = reported.get("mainTemp")
-    if not reported.get("engaged") or main is None or trgt is None or trgt <= 0:
+    if not reported.get("pwrOn") or main is None or trgt is None or trgt <= 0:
         return False
-    return main >= trgt
+    tolerance = 5 if reported.get("fah") else 3
+    return main >= trgt - tolerance

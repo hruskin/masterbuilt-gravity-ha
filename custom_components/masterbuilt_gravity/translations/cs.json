@@ -36,11 +36,12 @@
     },
     "binary_sensor": {
       "power": { "name": "Napájení" },
-      "cooking": { "name": "Vaření" },
+      "heating": { "name": "Topí" },
+      "engaged": { "name": "Aktivní" },
       "door_open": { "name": "Dvířka násypky" },
       "lid_open": { "name": "Víko" },
       "problem": { "name": "Problém" },
-      "target_reached": { "name": "Cílová teplota dosažena" }
+      "target_reached": { "name": "Na teplotě" }
     }
   }
 }
