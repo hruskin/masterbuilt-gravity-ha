@@ -36,11 +36,12 @@
     },
     "binary_sensor": {
       "power": { "name": "Power" },
-      "cooking": { "name": "Cooking" },
+      "heating": { "name": "Heating" },
+      "engaged": { "name": "Engaged" },
       "door_open": { "name": "Hopper door" },
       "lid_open": { "name": "Lid" },
       "problem": { "name": "Problem" },
-      "target_reached": { "name": "Target reached" }
+      "target_reached": { "name": "At temperature" }
     }
   }
 }

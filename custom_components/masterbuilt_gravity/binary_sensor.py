@@ -10,6 +10,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -32,9 +33,17 @@ BINARY_SENSORS: tuple[MbBinaryDescription, ...] = (
         value_fn=lambda r: r.get("pwrOn"),
     ),
     MbBinaryDescription(
-        key="cooking",
-        translation_key="cooking",
+        key="heating",
+        translation_key="heating",
         device_class=BinarySensorDeviceClass.HEAT,
+        value_fn=lambda r: r.get("heat", {}).get("t2", {}).get("heating"),
+    ),
+    MbBinaryDescription(
+        key="engaged",
+        translation_key="engaged",
+        device_class=BinarySensorDeviceClass.RUNNING,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda r: r.get("engaged"),
     ),
     MbBinaryDescription(
