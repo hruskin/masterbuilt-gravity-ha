@@ -1,4 +1,4 @@
-<img src="icon.png" alt="icon" width="96" align="right">
+<img src="https://raw.githubusercontent.com/hruskin/masterbuilt-gravity-ha/main/icon.png" alt="icon" width="96" align="right">
 
 # Masterbuilt Gravity (Unofficial) – Home Assistant integration
 
