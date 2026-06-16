@@ -41,7 +41,11 @@
       "door_open": { "name": "Hopper door" },
       "lid_open": { "name": "Lid" },
       "problem": { "name": "Problem" },
-      "target_reached": { "name": "At temperature" }
+      "target_reached": { "name": "At temperature" },
+      "probe1_reached": { "name": "Probe 1 at temperature" },
+      "probe2_reached": { "name": "Probe 2 at temperature" },
+      "probe3_reached": { "name": "Probe 3 at temperature" },
+      "probe4_reached": { "name": "Probe 4 at temperature" }
     }
   }
 }
