@@ -15,7 +15,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import MasterbuiltConfigEntry
-from .const import active_errors, target_reached
+from .const import active_errors, probe_present, probe_reached, target_reached
 from .entity import MasterbuiltEntity
 
 
@@ -23,6 +23,7 @@ from .entity import MasterbuiltEntity
 class MbBinaryDescription(BinarySensorEntityDescription):
     value_fn: Callable[[dict[str, Any]], bool | None]
     attrs_fn: Callable[[dict[str, Any]], dict[str, Any]] | None = None
+    present_fn: Callable[[dict[str, Any]], bool] | None = None
 
 
 BINARY_SENSORS: tuple[MbBinaryDescription, ...] = (
@@ -72,6 +73,17 @@ BINARY_SENSORS: tuple[MbBinaryDescription, ...] = (
     ),
 )
 
+PROBE_REACHED: tuple[MbBinaryDescription, ...] = tuple(
+    MbBinaryDescription(
+        key=f"probe{n}_reached",
+        translation_key=f"probe{n}_reached",
+        icon="mdi:thermometer-check",
+        value_fn=lambda r, n=n: probe_reached(r, n),
+        present_fn=lambda r, n=n: probe_present(r, n),
+    )
+    for n in (1, 2, 3, 4)
+)
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -82,7 +94,7 @@ async def async_setup_entry(
     entities = [
         MasterbuiltBinarySensor(coordinator, mac, desc)
         for mac in coordinator.devices
-        for desc in BINARY_SENSORS
+        for desc in (*BINARY_SENSORS, *PROBE_REACHED)
     ]
     async_add_entities(entities)
 
@@ -103,3 +115,10 @@ class MasterbuiltBinarySensor(MasterbuiltEntity, BinarySensorEntity):
         if self.entity_description.attrs_fn:
             return self.entity_description.attrs_fn(self.reported)
         return None
+
+    @property
+    def available(self) -> bool:
+        if not super().available:
+            return False
+        present = self.entity_description.present_fn
+        return present(self.reported) if present else True

@@ -21,6 +21,17 @@ THING_SALT = ".Kavry9-vaqsar-wirtok"
 # Target temperature sentinel meaning "not set / off" (0 F == ~-17 C).
 TARGET_OFF = -17
 
+# The grill/app fire their "reached" notification a few degrees below the
+# setpoint (observed ~2 C; the exact offset isn't cleanly exposed). Applied to
+# both grill and probe "at temperature" detection. Tune here if needed.
+REACHED_TOLERANCE_C = 3
+REACHED_TOLERANCE_F = 5
+
+
+def _reached(current: float, target: float, fah: bool | None) -> bool:
+    tol = REACHED_TOLERANCE_F if fah else REACHED_TOLERANCE_C
+    return current >= target - tol
+
 DEFAULT_SCAN_INTERVAL = 30  # seconds
 
 CONF_EMAIL = "email"
@@ -47,6 +58,20 @@ def error_text(reported: dict) -> str:
     return ", ".join(KNOWN_ERRORS.get(c, f"Error {c}") for c in active)
 
 
+def probe_present(reported: dict, n: int) -> bool:
+    """True when meat probe ``n`` is currently plugged in."""
+    return f"p{n}" in (reported.get("probes") or {})
+
+
+def probe_reached(reported: dict, n: int) -> bool:
+    """True when probe ``n`` has a target set and has reached it (with offset)."""
+    p = (reported.get("probes") or {}).get(f"p{n}") or {}
+    trgt, temp = p.get("trgt"), p.get("temp")
+    if not trgt or temp is None:  # trgt 0/None == no target set
+        return False
+    return _reached(temp, trgt, reported.get("fah"))
+
+
 def target_reached(reported: dict) -> bool:
     """Approximate 'at temperature': powered, valid setpoint, temp within tolerance.
 
@@ -59,5 +84,4 @@ def target_reached(reported: dict) -> bool:
     main = reported.get("mainTemp")
     if not reported.get("pwrOn") or main is None or trgt is None or trgt <= 0:
         return False
-    tolerance = 5 if reported.get("fah") else 3
-    return main >= trgt - tolerance
+    return _reached(main, trgt, reported.get("fah"))

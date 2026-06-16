@@ -41,7 +41,11 @@
       "door_open": { "name": "Dvířka násypky" },
       "lid_open": { "name": "Víko" },
       "problem": { "name": "Problém" },
-      "target_reached": { "name": "Na teplotě" }
+      "target_reached": { "name": "Na teplotě" },
+      "probe1_reached": { "name": "Sonda 1 na teplotě" },
+      "probe2_reached": { "name": "Sonda 2 na teplotě" },
+      "probe3_reached": { "name": "Sonda 3 na teplotě" },
+      "probe4_reached": { "name": "Sonda 4 na teplotě" }
     }
   }
 }
