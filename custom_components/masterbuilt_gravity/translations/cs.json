@@ -3,10 +3,18 @@
     "step": {
       "user": {
         "title": "Masterbuilt Gravity",
-        "description": "Přihlas se účtem z aplikace Masterbuilt.",
+        "description": "Přihlas se účtem z aplikace Masterbuilt. Tři přihlašovací údaje pro ovládání jsou volitelné — nech je prázdné pro pouhé senzory, nebo je vyplň pro ovládání grilu. Postup, jak je získat z aplikace, najdeš v README.",
         "data": {
           "email": "E-mail",
-          "password": "Heslo"
+          "password": "Heslo",
+          "cognito_username": "Uživatel pro ovládání (volitelné)",
+          "cognito_password": "Heslo pro ovládání (volitelné)",
+          "cognito_client_secret": "Client secret aplikace (volitelné)"
+        },
+        "data_description": {
+          "cognito_username": "Sdílený servisní účet pro vydání IoT certifikátu. Nutné jen pro ovládání grilu.",
+          "cognito_password": "Heslo sdíleného servisního účtu. Nutné jen pro ovládání grilu.",
+          "cognito_client_secret": "Client secret aplikace Cognito. Nutné jen pro ovládání grilu."
         }
       }
     },
@@ -45,7 +53,18 @@
       "probe1_reached": { "name": "Sonda 1 na teplotě" },
       "probe2_reached": { "name": "Sonda 2 na teplotě" },
       "probe3_reached": { "name": "Sonda 3 na teplotě" },
-      "probe4_reached": { "name": "Sonda 4 na teplotě" }
+      "probe4_reached": { "name": "Sonda 4 na teplotě" },
+      "cloud_connected": { "name": "Připojeno ke cloudu" }
+    },
+    "climate": {
+      "grill": { "name": "Gril" }
+    },
+    "number": {
+      "probe1_target_set": { "name": "Cíl sondy 1" },
+      "probe2_target_set": { "name": "Cíl sondy 2" },
+      "probe3_target_set": { "name": "Cíl sondy 3" },
+      "probe4_target_set": { "name": "Cíl sondy 4" },
+      "cook_timer": { "name": "Časovač" }
     }
   }
 }

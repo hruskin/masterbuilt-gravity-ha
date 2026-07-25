@@ -32,6 +32,10 @@ class MasterbuiltCoordinator(DataUpdateCoordinator[dict[str, dict[str, Any]]]):
         self.api = api
         self.entry = entry
         self.devices: dict[str, dict[str, Any]] = {}
+        # Set during setup; the MQTT write path used by the climate entity.
+        self.control: Any = None
+        # macAddress -> epoch seconds the grill last reported anything.
+        self.last_reported: dict[str, int] = {}
 
     async def _async_update_data(self) -> dict[str, dict[str, Any]]:
         try:
@@ -43,7 +47,10 @@ class MasterbuiltCoordinator(DataUpdateCoordinator[dict[str, dict[str, Any]]]):
             result: dict[str, dict[str, Any]] = {}
             for mac in self.devices:
                 try:
-                    result[mac] = await self.api.async_get_shadow(mac)
+                    reported, reported_at = await self.api.async_get_shadow(mac)
+                    result[mac] = reported
+                    if reported_at:
+                        self.last_reported[mac] = reported_at
                 except MasterbuiltApiError as err:
                     _LOGGER.debug("Shadow fetch failed for %s: %s", mac, err)
                     result[mac] = self.data.get(mac, {}) if self.data else {}

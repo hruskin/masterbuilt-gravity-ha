@@ -3,10 +3,18 @@
     "step": {
       "user": {
         "title": "Masterbuilt Gravity",
-        "description": "Sign in with your Masterbuilt app account.",
+        "description": "Sign in with your Masterbuilt app account. The three app control credentials are optional — leave them blank for sensors only; fill them in to control the grill. See the README for how to obtain them from the app.",
         "data": {
           "email": "Email",
-          "password": "Password"
+          "password": "Password",
+          "cognito_username": "App control username (optional)",
+          "cognito_password": "App control password (optional)",
+          "cognito_client_secret": "App client secret (optional)"
+        },
+        "data_description": {
+          "cognito_username": "Shared service-account username used to mint the IoT certificate. Required only for grill control.",
+          "cognito_password": "Shared service-account password. Required only for grill control.",
+          "cognito_client_secret": "Cognito app-client secret. Required only for grill control."
         }
       }
     },
@@ -45,7 +53,18 @@
       "probe1_reached": { "name": "Probe 1 at temperature" },
       "probe2_reached": { "name": "Probe 2 at temperature" },
       "probe3_reached": { "name": "Probe 3 at temperature" },
-      "probe4_reached": { "name": "Probe 4 at temperature" }
+      "probe4_reached": { "name": "Probe 4 at temperature" },
+      "cloud_connected": { "name": "Cloud connected" }
+    },
+    "climate": {
+      "grill": { "name": "Grill" }
+    },
+    "number": {
+      "probe1_target_set": { "name": "Probe 1 target" },
+      "probe2_target_set": { "name": "Probe 2 target" },
+      "probe3_target_set": { "name": "Probe 3 target" },
+      "probe4_target_set": { "name": "Probe 4 target" },
+      "cook_timer": { "name": "Cook timer" }
     }
   }
 }

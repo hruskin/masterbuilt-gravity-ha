@@ -20,6 +20,18 @@ class MasterbuiltApiError(Exception):
     """Raised on other API/transport errors."""
 
 
+def _newest_timestamp(node: Any) -> int | None:
+    """Deepest-newest ``timestamp`` in a shadow metadata subtree, or None."""
+    if not isinstance(node, dict):
+        return None
+    ts = node.get("timestamp")
+    if isinstance(ts, int):
+        return ts
+    found = [_newest_timestamp(v) for v in node.values()]
+    found = [t for t in found if t is not None]
+    return max(found) if found else None
+
+
 def thing_name(mac_address: str) -> str:
     """Derive the AWS IoT thing name from the API mac address.
 
@@ -86,11 +98,18 @@ class MasterbuiltApi:
         data = await self._authed_get("/api/v1/paired-device")
         return data if isinstance(data, list) else []
 
-    async def async_get_shadow(self, mac_address: str) -> dict[str, Any]:
-        """Return the reported shadow state for a device, or {} if unavailable."""
+    async def async_get_shadow(self, mac_address: str) -> tuple[dict[str, Any], int | None]:
+        """Return ``(reported_state, last_reported_epoch)`` for a device.
+
+        The timestamp comes from the shadow's ``metadata.reported`` tree and is the
+        only way to tell a live grill from a stale snapshot: if the grill drops its
+        cloud session, ``reported`` keeps serving old values indefinitely and no
+        command can be applied. Returns ``(state, None)`` if metadata is absent.
+        """
         path = (
             f"/api/v1/paired-device/{mac_address}/shadows/current"
             f"?thing_name={thing_name(mac_address)}"
         )
         data = await self._authed_get(path)
-        return data.get("state", {}).get("reported", {}) or {}
+        reported = data.get("state", {}).get("reported", {}) or {}
+        return reported, _newest_timestamp(data.get("metadata", {}).get("reported"))

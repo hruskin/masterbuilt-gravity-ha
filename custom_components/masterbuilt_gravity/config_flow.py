@@ -15,7 +15,14 @@ from homeassistant.helpers.selector import (
 )
 
 from .api import MasterbuiltApi, MasterbuiltApiError, MasterbuiltAuthError
-from .const import CONF_EMAIL, CONF_PASSWORD, DOMAIN
+from .const import (
+    CONF_COGNITO_CLIENT_SECRET,
+    CONF_COGNITO_PASSWORD,
+    CONF_COGNITO_USERNAME,
+    CONF_EMAIL,
+    CONF_PASSWORD,
+    DOMAIN,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -28,6 +35,18 @@ STEP_USER = vol.Schema(
             TextSelectorConfig(
                 type=TextSelectorType.PASSWORD, autocomplete="current-password"
             )
+        ),
+        # Shared app "bootstrap" credentials for the AWS IoT control path. Optional:
+        # leave blank for a read-only (sensors only) setup. Stored in the config
+        # entry, never in source. See the README for how to obtain them from the app.
+        vol.Optional(CONF_COGNITO_USERNAME): TextSelector(
+            TextSelectorConfig(type=TextSelectorType.TEXT)
+        ),
+        vol.Optional(CONF_COGNITO_PASSWORD): TextSelector(
+            TextSelectorConfig(type=TextSelectorType.PASSWORD)
+        ),
+        vol.Optional(CONF_COGNITO_CLIENT_SECRET): TextSelector(
+            TextSelectorConfig(type=TextSelectorType.PASSWORD)
         ),
     }
 )
